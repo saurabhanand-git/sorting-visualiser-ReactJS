@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { generateNewArray } from "./utils/arrays";
+import { bubbleSort } from "./utils/sorting";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -20,10 +21,16 @@ const Bars = styled.div`
 `;
 
 const Bar = styled.div`
-  width: 5px;
+  width: 15px;
   height: ${(props) => props.h / 2}%;
   margin: 0 1px 0 1px;
-  background: rgba(15, 145, 21, 0.349);
+  background: rgba(141, 141, 141, 0.349);
+  .comparing {
+    background: green;
+  }
+  .swapping {
+    background: red;
+  }
 `;
 
 class Content extends Component {
@@ -31,7 +38,7 @@ class Content extends Component {
     values: [],
     max: 200,
     min: 5,
-    width: 200,
+    width: 5,
   };
 
   componentDidMount() {
@@ -45,9 +52,17 @@ class Content extends Component {
   };
 
   handleSort = () => {
-    const sortedArr = this.state.values.sort((a, b) => a - b);
-    this.setState({ values: sortedArr });
-    console.log(this.state.values);
+    const { sortedArray, animations } = bubbleSort(this.state.values);
+    //const sortedArr = this.state.values.sort((a, b) => a - b);
+
+    //this.setState({ values: sortedArray });
+    this.processAnimations(animations);
+  };
+
+  processAnimations = (animations) => {
+    animations.forEach(([i, j, action]) => {
+      console.log(i, j, action);
+    });
   };
 
   render() {
