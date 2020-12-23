@@ -1,18 +1,19 @@
 export const bubbleSort = (unsortedArr) => {
   const n = unsortedArr.length;
-  const inputArr = [...unsortedArr];
-
+  const input = [...unsortedArr];
+  let j = 0;
   let sorted = false;
 
   while (!sorted) {
     sorted = true;
-    for (let i = 0; i < n; i++) {
-      if (inputArr[i] > inputArr[i + 1]) {
-        [inputArr[i], inputArr[i + 1]] = [inputArr[i + 1], inputArr[i]];
+    for (let i = 0; i < n - j + 1; i++) {
+      if (input[i] > input[i + 1]) {
+        [input[i], input[i + 1]] = [input[i + 1], input[i]];
         sorted = false;
       }
     }
+    j++;
   }
 
-  return inputArr;
+  return input;
 };
