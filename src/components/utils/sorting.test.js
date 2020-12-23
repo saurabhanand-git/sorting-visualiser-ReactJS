@@ -6,7 +6,7 @@ describe("sorting functions", () => {
     it("should return a sorted array", () => {
       const unsortedArr = generateNewArray(200, 1, 200);
       const sorted = [...unsortedArr].sort((a, b) => a - b);
-      expect(bubbleSort(unsortedArr)).toEqual(sorted);
+      expect(bubbleSort(unsortedArr).sortedArray).toEqual(sorted);
     });
     it("should not mutate the input array", () => {
       const unsortedArr = generateNewArray(200, 1, 200);

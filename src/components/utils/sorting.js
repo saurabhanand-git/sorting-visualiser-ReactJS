@@ -15,5 +15,5 @@ export const bubbleSort = (unsortedArr) => {
     j++;
   }
 
-  return input;
+  return { sortedArray: input };
 };
