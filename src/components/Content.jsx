@@ -73,8 +73,8 @@ class Content extends Component {
           <button onClick={this.handleSort}>Sort</button>
         </Controls>
         <Bars>
-          {this.state.values.map((value) => {
-            return <Bar h={value}></Bar>;
+          {this.state.values.map((value, index) => {
+            return <Bar h={value} key={index}></Bar>;
           })}
         </Bars>
       </ContentContainer>

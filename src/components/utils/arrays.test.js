@@ -6,8 +6,9 @@ describe("generateNewArray", () => {
   });
   it("should return an array with no values outside the specified bounds", () => {
     const testArray = generateNewArray(100, 5, 50);
-    const max = Math.max(...testArray);
-    const min = Math.min(...testArray);
+    const values = testArray.map((obj) => obj.value);
+    const max = Math.max(...values);
+    const min = Math.min(...values);
     expect(max).toBeLessThan(101);
     expect(min).toBeGreaterThan(4);
   });
