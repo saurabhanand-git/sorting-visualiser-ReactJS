@@ -17,20 +17,22 @@ const Bars = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  width: 80vw;
   height: 80vh;
 `;
 
 const theme = {
-  comp: "green",
+  comp: "blue",
   swap: "red",
+  sorted: "green",
 };
 
 const Bar = styled.div`
-  width: 5px;
+  width: ${(props) => 100 / props.n}%;
   height: ${(props) => props.h / 2}%;
   margin: 0 1px 0 1px;
   background: rgba(141, 141, 141, 0.349);
-  background: ${(props) => theme[props.class]};
+  background: ${(props) => theme[props.actionTheme]};
 `;
 
 class Content extends Component {
@@ -50,6 +52,11 @@ class Content extends Component {
   handleRandomise = () => {
     const { max, min, width } = this.state;
     this.setState({ values: generateNewArray(max, min, width) });
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.handleSort();
   };
 
   handleSort = () => {
@@ -76,19 +83,72 @@ class Content extends Component {
         });
       }, delay * aIndex);
     });
+    setTimeout(() => {
+      this.isSorted();
+    }, animations.length * delay);
+  };
+
+  isSorted = () => {
+    const { values } = this.state;
+    values.forEach((valueObj, index) => {
+      setTimeout(() => {
+        this.setState((currentState) => {
+          currentState.values[index].class = "sorted";
+          return { currentState };
+        });
+      }, 1 * index);
+    });
+  };
+
+  handleDelayChange = (event) => {
+    const newDelay = event.target.value;
+    this.setState({ delay: newDelay });
+  };
+
+  handleWidthChange = (event) => {
+    const newWidth = Number(event.target.value);
+    //const { max, min } = this.state;
+    this.setState({
+      width: newWidth,
+    });
   };
 
   render() {
+    const { delay, width } = this.state;
+    const nBars = this.state.values.length;
     return (
       <ContentContainer>
         <Controls>
+          <label>
+            Array Size
+            <input
+              type="number"
+              value={width}
+              min="3"
+              max="150"
+              onChange={this.handleWidthChange}></input>
+          </label>
           <button onClick={this.handleRandomise}>Randomise</button>
+          <input
+            type="range"
+            min="1"
+            max="2000"
+            value={delay}
+            onChange={this.handleDelayChange}></input>
+          <input
+            type="number"
+            value={delay}
+            onChange={this.handleDelayChange}></input>
           <button onClick={this.handleSort}>Sort</button>
         </Controls>
         <Bars>
           {this.state.values.map((valueObj, index) => {
             return (
-              <Bar h={valueObj.value} class={valueObj.class} key={index}></Bar>
+              <Bar
+                h={valueObj.value}
+                actionTheme={valueObj.class}
+                key={index}
+                n={nBars}></Bar>
             );
           })}
         </Bars>
