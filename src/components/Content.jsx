@@ -40,8 +40,9 @@ class Content extends Component {
     values: [],
     max: 200,
     min: 5,
-    width: 100,
-    delay: 20,
+    width: 50,
+    delay: 1,
+    isStopped: false,
   };
 
   componentDidMount() {
@@ -54,15 +55,19 @@ class Content extends Component {
     this.setState({ values: generateNewArray(max, min, width) });
   };
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    this.handleSort();
-  };
+  // handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   this.handleSort();
+  // };
 
   handleSort = () => {
     const valuesToSort = this.state.values.map((valueObj) => valueObj.value);
     const { animations } = bubbleSort(valuesToSort);
     this.processAnimations(animations);
+  };
+
+  handleStop = () => {
+    this.setState({ isStopped: true });
   };
 
   processAnimations = (animations) => {
@@ -131,7 +136,7 @@ class Content extends Component {
           <button onClick={this.handleRandomise}>Randomise</button>
           <input
             type="range"
-            min="1"
+            min="0.005"
             max="2000"
             value={delay}
             onChange={this.handleDelayChange}></input>
@@ -140,6 +145,7 @@ class Content extends Component {
             value={delay}
             onChange={this.handleDelayChange}></input>
           <button onClick={this.handleSort}>Sort</button>
+          <button onClick={this.handleStop}>STOP</button>
         </Controls>
         <Bars>
           {this.state.values.map((valueObj, index) => {
