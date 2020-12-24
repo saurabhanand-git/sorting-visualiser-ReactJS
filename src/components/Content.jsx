@@ -26,7 +26,7 @@ const theme = {
 };
 
 const Bar = styled.div`
-  width: 15px;
+  width: 5px;
   height: ${(props) => props.h / 2}%;
   margin: 0 1px 0 1px;
   background: rgba(141, 141, 141, 0.349);
@@ -38,8 +38,8 @@ class Content extends Component {
     values: [],
     max: 200,
     min: 5,
-    width: 5,
-    delay: 10,
+    width: 100,
+    delay: 20,
   };
 
   componentDidMount() {
@@ -54,16 +54,27 @@ class Content extends Component {
 
   handleSort = () => {
     const valuesToSort = this.state.values.map((valueObj) => valueObj.value);
-    const { sortedArray, animations } = bubbleSort(valuesToSort);
-    //const sortedArr = this.state.values.sort((a, b) => a - b);
-
-    //this.setState({ values: sortedArray });
+    const { animations } = bubbleSort(valuesToSort);
     this.processAnimations(animations);
   };
 
   processAnimations = (animations) => {
-    animations.forEach(([i, j, action]) => {
-      console.log(i, j, action);
+    const { delay } = this.state;
+    animations.forEach(([i, j, action], aIndex) => {
+      setTimeout(() => {
+        this.setState((currentState) => {
+          const updatedArray = [...currentState.values];
+          updatedArray[i].class = action;
+          updatedArray[j].class = action;
+          if (action === "swap") {
+            [updatedArray[i], updatedArray[j]] = [
+              updatedArray[j],
+              updatedArray[i],
+            ];
+          }
+          return { values: updatedArray };
+        });
+      }, delay * aIndex);
     });
   };
 
