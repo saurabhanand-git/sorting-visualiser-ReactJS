@@ -20,17 +20,17 @@ const Bars = styled.div`
   height: 80vh;
 `;
 
+const theme = {
+  comp: "green",
+  swap: "red",
+};
+
 const Bar = styled.div`
   width: 15px;
   height: ${(props) => props.h / 2}%;
   margin: 0 1px 0 1px;
   background: rgba(141, 141, 141, 0.349);
-  .comparing {
-    background: green;
-  }
-  .swapping {
-    background: red;
-  }
+  background: ${(props) => theme[props.class]};
 `;
 
 class Content extends Component {
@@ -39,6 +39,7 @@ class Content extends Component {
     max: 200,
     min: 5,
     width: 5,
+    delay: 10,
   };
 
   componentDidMount() {
@@ -52,7 +53,8 @@ class Content extends Component {
   };
 
   handleSort = () => {
-    const { sortedArray, animations } = bubbleSort(this.state.values);
+    const valuesToSort = this.state.values.map((valueObj) => valueObj.value);
+    const { sortedArray, animations } = bubbleSort(valuesToSort);
     //const sortedArr = this.state.values.sort((a, b) => a - b);
 
     //this.setState({ values: sortedArray });
@@ -73,8 +75,10 @@ class Content extends Component {
           <button onClick={this.handleSort}>Sort</button>
         </Controls>
         <Bars>
-          {this.state.values.map((value, index) => {
-            return <Bar h={value} key={index}></Bar>;
+          {this.state.values.map((valueObj, index) => {
+            return (
+              <Bar h={valueObj.value} class={valueObj.class} key={index}></Bar>
+            );
           })}
         </Bars>
       </ContentContainer>
