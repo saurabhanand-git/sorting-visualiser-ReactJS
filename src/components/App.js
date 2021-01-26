@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import styled from "styled-components";
 import Content from "./Content";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Wrapper = styled.div`
   display: flex;
