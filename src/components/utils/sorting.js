@@ -25,3 +25,25 @@ export const bubbleSort = (unsortedArr) => {
   sortObj.sortedArray = input;
   return sortObj;
 };
+
+export const insertionSort = (unsortedArr) => {
+  const n = unsortedArr.length;
+  const input = [...unsortedArr];
+  const sortObj = {
+    animations: [],
+  };
+  // let i = i;
+  for (let i = 1; i < n; i++) {
+    let key = input[i];
+
+    let j = i - 1;
+    while (j >= 0 && key < input[j]) {
+      input[j + 1] = input[j];
+      j -= 1;
+    }
+    input[j + 1] = key;
+  }
+
+  sortObj.sortedArray = input;
+  return sortObj;
+};
