@@ -26,15 +26,16 @@ const Bar = styled.div`
   width: ${(props) => 100 / props.n}%;
   height: ${(props) => props.h / 2}%;
   margin: 0 1px 0 1px;
+  border-radius: 5px;
   background: rgba(141, 141, 141, 0.349);
   background: ${(props) => theme[props.actionTheme]};
 `;
 
 const theme = {
   done: "rgba(141, 141, 141, 0.349)",
-  comp: "blue",
-  swap: "red",
-  sorted: "green",
+  comp: "rgba(52, 72, 173, 0.8)",
+  swap: "rgba(196, 64, 64, 0.8)",
+  sorted: "rgba(92, 159, 77, 0.8)",
 };
 
 export default function ContentScreen() {
@@ -42,6 +43,8 @@ export default function ContentScreen() {
   const [nBars, setNBars] = useState(15);
   const [delay, setDelay] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSorting, setIsSorting] = useState(false);
+  const [isSorted, setIsSorted] = useState(false);
   const maxA = 200;
   const minA = 5;
   const maxN = 150;
@@ -59,6 +62,7 @@ export default function ContentScreen() {
 
   const handleRandomise = async () => {
     setValues(generateNewArray(maxA, minA, nBars));
+    setIsSorted(false);
   };
 
   const handleDelayChange = (event) => {
@@ -68,6 +72,7 @@ export default function ContentScreen() {
 
   const handleSort = (event) => {
     event.preventDefault();
+    setIsSorting(true);
     const valuesToSort = values.map((valueObj) => valueObj.value);
     const { animations } = bubbleSort(valuesToSort);
     processAnimations(animations);
@@ -92,7 +97,9 @@ export default function ContentScreen() {
       }, delay * aIndex);
     });
     setTimeout(() => {
-      isSorted();
+      animateIsSorted();
+      setIsSorting(false);
+      setIsSorted(true);
     }, animations.length * delay);
   };
 
@@ -101,7 +108,7 @@ export default function ContentScreen() {
     array[j].class = action;
   };
 
-  const isSorted = () => {
+  const animateIsSorted = () => {
     values.forEach((valueObj, index) => {
       setTimeout(() => {
         setValues((currentValues) => {
@@ -109,7 +116,7 @@ export default function ContentScreen() {
           updatedArray[index].class = "sorted";
           return updatedArray;
         });
-      }, 20 * index);
+      }, 5 * index);
     });
   };
 
@@ -126,9 +133,10 @@ export default function ContentScreen() {
             max={maxN}
             min={minN}
             onChange={handleBarNChange}
+            disabled={isSorting}
           />
         </Form.Group>
-        <Button variant="info" onClick={handleRandomise}>
+        <Button variant="info" onClick={handleRandomise} disabled={isSorting}>
           Randomise
         </Button>
         <Form.Group>
@@ -141,9 +149,14 @@ export default function ContentScreen() {
             max={2000}
             min={0}
             onChange={handleDelayChange}
+            disabled={isSorting}
           />
         </Form.Group>
-        <Button variant="primary" onClick={handleSort}>
+        <Button
+          variant="primary"
+          onClick={handleSort}
+          disabled={isSorted || isSorting}
+        >
           Sort
         </Button>
       </Form>
