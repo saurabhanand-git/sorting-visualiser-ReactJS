@@ -9,14 +9,14 @@ export const bubbleSort = (unsortedArr) => {
   while (!sorted) {
     sorted = true;
     for (let i = 0; i < n - j - 1; i++) {
-      sortObj.animations.push([i, i + 1, "comp"]);
+      sortObj.animations.push([i, i + 1, "comp", "comp", "comp"]);
       if (input[i] > input[i + 1]) {
-        sortObj.animations.push([i, i + 1, "swap"]);
-        sortObj.animations.push([i, i + 1, "done"]);
+        sortObj.animations.push([i, i + 1, "swap", "swap", "swap"]);
+        sortObj.animations.push([i, i + 1, "done", "done", "done"]);
         [input[i], input[i + 1]] = [input[i + 1], input[i]];
         sorted = false;
       } else {
-        sortObj.animations.push([i, i + 1, "done"]);
+        sortObj.animations.push([i, i + 1, "done", "done", "done"]);
       }
     }
     j++;
@@ -32,18 +32,21 @@ export const insertionSort = (unsortedArr) => {
   const sortObj = {
     animations: [],
   };
-  // let i = i;
+
   for (let i = 1; i < n; i++) {
     let key = input[i];
-
     let j = i - 1;
+    sortObj.animations.push([i, j, "comp", "key", "comp"]);
     while (j >= 0 && key < input[j]) {
+      sortObj.animations.push([j + 1, j, "swap", "key", "swap"]);
       input[j + 1] = input[j];
+      sortObj.animations.push([j + 1, j, "insert", "done", "key"]);
       j -= 1;
     }
     input[j + 1] = key;
+    sortObj.animations.push([i, j, "done", "done", "done"]);
   }
-
+  console.log(sortObj.animations);
   sortObj.sortedArray = input;
   return sortObj;
 };
