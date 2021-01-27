@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { generateNewArray } from "./utils/arrays";
-import { bubbleSort, bubbleSort2 } from "./utils/sorting";
+import { bubbleSort } from "./utils/sorting";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -69,7 +69,7 @@ export default function ContentScreen() {
   const handleSort = (event) => {
     event.preventDefault();
     const valuesToSort = values.map((valueObj) => valueObj.value);
-    const { animations } = bubbleSort2(valuesToSort);
+    const { animations } = bubbleSort(valuesToSort);
     processAnimations(animations);
   };
 
@@ -99,11 +99,6 @@ export default function ContentScreen() {
   const colourChange = (array, i, j, action) => {
     array[i].class = action;
     array[j].class = action;
-
-    // setTimeout(() => {
-    //   array[i].class = "base";
-    //   array[j].class = "base";
-    // }, delay * 2);
   };
 
   const isSorted = () => {
