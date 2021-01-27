@@ -45,6 +45,8 @@ export default function ContentScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSorting, setIsSorting] = useState(false);
   const [isSorted, setIsSorted] = useState(false);
+  const [isStopped, setIsStopped] = useState(false);
+  const [timeouts, setTimeouts] = useState([]);
   const maxA = 200;
   const minA = 5;
   const maxN = 150;
@@ -61,6 +63,7 @@ export default function ContentScreen() {
   };
 
   const handleRandomise = async () => {
+    setIsStopped(false);
     setValues(generateNewArray(maxA, minA, nBars));
     setIsSorted(false);
   };
@@ -73,14 +76,24 @@ export default function ContentScreen() {
   const handleSort = (event) => {
     event.preventDefault();
     setIsSorting(true);
+    // if restarting from a stop condition, need to reset the bar colors
+    if (isStopped) {
+      setValues((currentValues) => {
+        return currentValues.map((barObj) => {
+          return { ...barObj, class: "" };
+        });
+      });
+      setIsStopped(false);
+    }
     const valuesToSort = values.map((valueObj) => valueObj.value);
     const { animations } = bubbleSort(valuesToSort);
     processAnimations(animations);
   };
 
+  // add timeout references to the satte so they may be cleared
   const processAnimations = (animations) => {
     animations.forEach(([i, j, action], aIndex) => {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setValues((currentValues) => {
           const updatedArray = [...currentValues];
           if (action === "swap") {
@@ -95,17 +108,29 @@ export default function ContentScreen() {
           return updatedArray;
         });
       }, delay * aIndex);
+      setTimeouts((currentTimeouts) => {
+        return [...currentTimeouts, timeout];
+      });
     });
-    setTimeout(() => {
+    const sortedTimeout = setTimeout(() => {
       animateIsSorted();
       setIsSorting(false);
       setIsSorted(true);
     }, animations.length * delay);
+    setTimeouts((currentTimeouts) => {
+      return [...currentTimeouts, sortedTimeout];
+    });
   };
 
   const colourChange = (array, i, j, action) => {
     array[i].class = action;
     array[j].class = action;
+  };
+
+  const handleStop = () => {
+    setIsStopped(true);
+    timeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+    setIsSorting(false);
   };
 
   const animateIsSorted = () => {
@@ -158,6 +183,9 @@ export default function ContentScreen() {
           disabled={isSorted || isSorting}
         >
           Sort
+        </Button>
+        <Button variant="danger" onClick={handleStop} disabled={!isSorting}>
+          Stop
         </Button>
       </Form>
       {isLoading ? (
