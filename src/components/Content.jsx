@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { generateNewArray } from "./utils/arrays";
-import { bubbleSort } from "./utils/sorting";
+import { bubbleSort, bubbleSort2 } from "./utils/sorting";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -31,7 +31,7 @@ const Bar = styled.div`
 `;
 
 const theme = {
-  base: "grey",
+  done: "rgba(141, 141, 141, 0.349)",
   comp: "blue",
   swap: "red",
   sorted: "green",
@@ -69,7 +69,7 @@ export default function ContentScreen() {
   const handleSort = (event) => {
     event.preventDefault();
     const valuesToSort = values.map((valueObj) => valueObj.value);
-    const { animations } = bubbleSort(valuesToSort);
+    const { animations } = bubbleSort2(valuesToSort);
     processAnimations(animations);
   };
 
@@ -78,16 +78,14 @@ export default function ContentScreen() {
       setTimeout(() => {
         setValues((currentValues) => {
           const updatedArray = [...currentValues];
-          if (action === "comp") {
-            colourChange(updatedArray, i, j, action);
-            // updatedArray[i].class = action;
-            // updatedArray[j].class = action;
-          } else if (action === "swap") {
+          if (action === "swap") {
             colourChange(updatedArray, i, j, action);
             [updatedArray[i], updatedArray[j]] = [
               updatedArray[j],
               updatedArray[i],
             ];
+          } else {
+            colourChange(updatedArray, i, j, action);
           }
           return updatedArray;
         });
@@ -99,14 +97,13 @@ export default function ContentScreen() {
   };
 
   const colourChange = (array, i, j, action) => {
-    setTimeout(() => {
-      array[i].class = action;
-      array[j].class = action;
-    }, delay);
-    setTimeout(() => {
-      array[i].class = "base";
-      array[j].class = "base";
-    }, delay * 2);
+    array[i].class = action;
+    array[j].class = action;
+
+    // setTimeout(() => {
+    //   array[i].class = "base";
+    //   array[j].class = "base";
+    // }, delay * 2);
   };
 
   const isSorted = () => {
@@ -174,3 +171,39 @@ export default function ContentScreen() {
     </ContentContainer>
   );
 }
+
+// const processAnimations = (animations) => {
+//   animations.forEach(([i, j, action], aIndex) => {
+//     setTimeout(() => {
+//       setValues((currentValues) => {
+//         const updatedArray = [...currentValues];
+//         if (action === "comp") {
+//           colourChange(updatedArray, i, j, action);
+//           // updatedArray[i].class = action;
+//           // updatedArray[j].class = action;
+//         } else if (action === "swap") {
+//           colourChange(updatedArray, i, j, action);
+//           [updatedArray[i], updatedArray[j]] = [
+//             updatedArray[j],
+//             updatedArray[i],
+//           ];
+//         }
+//         return updatedArray;
+//       });
+//     }, delay * aIndex);
+//   });
+//   setTimeout(() => {
+//     isSorted();
+//   }, animations.length * delay);
+// };
+
+// const colourChange = (array, i, j, action) => {
+//   setTimeout(() => {
+//     array[i].class = action;
+//     array[j].class = action;
+//   }, delay);
+//   setTimeout(() => {
+//     array[i].class = "base";
+//     array[j].class = "base";
+//   }, delay * 2);
+// };
