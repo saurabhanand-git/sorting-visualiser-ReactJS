@@ -4,13 +4,69 @@ import { generateNewArray } from "./utils/arrays";
 import { bubbleSort } from "./utils/sorting";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import logo from "../assets/logo.png";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
 
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  form {
+  width: 100%;
+  height: 100%;
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.2rem 3rem 0rem 3rem;
+  width: 100%;
+  background-color: rgb(28, 48, 65);
+  header {
     display: flex;
+    align-items: flex-end;
+    img {
+      width: 3.8rem;
+      margin: 0.3rem 0 0.3rem 0;
+      padding: 0 0 0.3rem 0;
+    }
+    h1 {
+      color: #fff;
+      font-size: 2.6rem;
+      margin: 0 0 0rem 0.3rem;
+      padding: 0 0 0.3rem 0;
+    }
+  }
+`;
+
+const CustomForm = styled(Form)`
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  color: #fff;
+  .form-group {
+    margin: 0 1rem 0 1rem;
+    width: 8rem;
+  }
+  .form-label {
+    margin: 0 0 0 0;
+  }
+  .form-text {
+  }
+  .custom-range {
+  }
+  .algo {
+    margin: 0 2rem 0 2rem;
+    .dropdown-toggle {
+      width: 9rem;
+    }
+  }
+  button {
+    height: 3rem;
+    margin: 0 0.2rem 0 0.2rem;
+    width: 7rem;
   }
 `;
 
@@ -20,6 +76,7 @@ const Bars = styled.div`
   align-items: flex-end;
   width: 80vw;
   height: 80vh;
+  margin: 2rem 0 0 1rem;
 `;
 
 const Bar = styled.div`
@@ -47,15 +104,25 @@ export default function ContentScreen() {
   const [isSorted, setIsSorted] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
   const [timeouts, setTimeouts] = useState([]);
+  const [algorithm, setAlgorithm] = useState("bubble");
   const maxA = 200;
   const minA = 5;
   const maxN = 150;
   const minN = 3;
+  const algoRef = {
+    bubble: { f: bubbleSort, title: "Bubble Sort" },
+  };
 
   useEffect(() => {
     setValues(generateNewArray(maxA, minA, nBars));
     setIsLoading(false);
   }, []);
+
+  const handleAlgoSelect = (event) => {
+    const selected = event.target.name;
+    console.log("selected>", selected);
+    setAlgorithm(selected);
+  };
 
   const handleBarNChange = (event) => {
     const newN = Number(event.target.value);
@@ -86,7 +153,8 @@ export default function ContentScreen() {
       setIsStopped(false);
     }
     const valuesToSort = values.map((valueObj) => valueObj.value);
-    const { animations } = bubbleSort(valuesToSort);
+    // const { animations } = bubbleSort(valuesToSort);
+    const { animations } = algoRef[algorithm].f(valuesToSort);
     processAnimations(animations);
   };
 
@@ -147,47 +215,69 @@ export default function ContentScreen() {
 
   return (
     <ContentContainer>
-      <Form>
-        <Form.Group>
-          <Form.Label>Array Size: </Form.Label>
-          <Form.Text>{nBars}</Form.Text>
-          <Form.Control
-            type="range"
-            custom
-            value={nBars}
-            max={maxN}
-            min={minN}
-            onChange={handleBarNChange}
-            disabled={isSorting}
-          />
-        </Form.Group>
-        <Button variant="info" onClick={handleRandomise} disabled={isSorting}>
-          Randomise
-        </Button>
-        <Form.Group>
-          <Form.Label>Animation Delay: </Form.Label>
-          <Form.Text>{delay} ms</Form.Text>
-          <Form.Control
-            type="range"
-            custom
-            value={delay}
-            max={2000}
-            min={0}
-            onChange={handleDelayChange}
-            disabled={isSorting}
-          />
-        </Form.Group>
-        <Button
-          variant="primary"
-          onClick={handleSort}
-          disabled={isSorted || isSorting}
-        >
-          Sort
-        </Button>
-        <Button variant="danger" onClick={handleStop} disabled={!isSorting}>
-          Stop
-        </Button>
-      </Form>
+      <HeaderContainer>
+        <header>
+          <img src={logo} alt="sorted bars logo" />
+          <h1>Sort Visualiser</h1>
+        </header>
+        <CustomForm>
+          <Form.Group className="algo">
+            <DropdownButton title={algoRef[algorithm].title}>
+              {Object.keys(algoRef).map((algoKey) => {
+                return (
+                  <DropdownItem
+                    key={algoKey}
+                    name={algoKey}
+                    onClick={handleAlgoSelect}
+                  >
+                    {algoRef[algoKey].title}
+                  </DropdownItem>
+                );
+              })}
+            </DropdownButton>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Array Size: </Form.Label>
+            <Form.Text>{nBars}</Form.Text>
+            <Form.Control
+              type="range"
+              custom
+              value={nBars}
+              max={maxN}
+              min={minN}
+              onChange={handleBarNChange}
+              disabled={isSorting}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Animation Delay: </Form.Label>
+            <Form.Text>{delay} ms</Form.Text>
+            <Form.Control
+              type="range"
+              custom
+              value={delay}
+              max={1000}
+              min={0}
+              step={100}
+              onChange={handleDelayChange}
+              disabled={isSorting}
+            />
+          </Form.Group>
+          <Button variant="info" onClick={handleRandomise} disabled={isSorting}>
+            Randomise
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleSort}
+            disabled={isSorted || isSorting}
+          >
+            Sort
+          </Button>
+          <Button variant="danger" onClick={handleStop} disabled={!isSorting}>
+            Stop
+          </Button>
+        </CustomForm>
+      </HeaderContainer>
       {isLoading ? (
         <span>Loading</span>
       ) : (
