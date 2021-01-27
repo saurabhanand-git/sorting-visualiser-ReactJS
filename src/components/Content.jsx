@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { generateNewArray } from "./utils/arrays";
-import { bubbleSort } from "./utils/sorting";
+import { bubbleSort, insertionSort } from "./utils/sorting";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -91,6 +91,7 @@ const Bar = styled.div`
 const theme = {
   done: "rgba(141, 141, 141, 0.349)",
   comp: "rgba(52, 72, 173, 0.8)",
+  key: "rgba(220, 186, 82, 0.8)",
   swap: "rgba(196, 64, 64, 0.8)",
   sorted: "rgba(92, 159, 77, 0.8)",
 };
@@ -111,6 +112,7 @@ export default function ContentScreen() {
   const minN = 3;
   const algoRef = {
     bubble: { f: bubbleSort, title: "Bubble Sort" },
+    insertion: { f: insertionSort, title: "Insertion Sort" },
   };
 
   useEffect(() => {
@@ -153,25 +155,24 @@ export default function ContentScreen() {
       setIsStopped(false);
     }
     const valuesToSort = values.map((valueObj) => valueObj.value);
-    // const { animations } = bubbleSort(valuesToSort);
     const { animations } = algoRef[algorithm].f(valuesToSort);
     processAnimations(animations);
   };
 
   // add timeout references to the satte so they may be cleared
   const processAnimations = (animations) => {
-    animations.forEach(([i, j, action], aIndex) => {
+    animations.forEach(([i, j, action, iClass, jClass], aIndex) => {
       const timeout = setTimeout(() => {
         setValues((currentValues) => {
           const updatedArray = [...currentValues];
           if (action === "swap") {
-            colourChange(updatedArray, i, j, action);
+            colourChange(updatedArray, i, j, iClass, jClass);
             [updatedArray[i], updatedArray[j]] = [
               updatedArray[j],
               updatedArray[i],
             ];
           } else {
-            colourChange(updatedArray, i, j, action);
+            colourChange(updatedArray, i, j, iClass, jClass);
           }
           return updatedArray;
         });
@@ -190,9 +191,14 @@ export default function ContentScreen() {
     });
   };
 
-  const colourChange = (array, i, j, action) => {
-    array[i].class = action;
-    array[j].class = action;
+  const colourChange = (array, i, j, iClass, jClass) => {
+    // conditionals added as in some sort algorithms array[j] will be undefined
+    if (array[i]) {
+      array[i].class = iClass;
+    }
+    if (array[j]) {
+      array[j].class = jClass;
+    }
   };
 
   const handleStop = () => {
