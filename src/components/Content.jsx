@@ -79,11 +79,11 @@ export default function ContentScreen() {
         setValues((currentValues) => {
           const updatedArray = [...currentValues];
           if (action === "comp") {
-            updatedArray[i].class = action;
-            updatedArray[j].class = action;
+            colourChange(updatedArray, i, j, action);
+            // updatedArray[i].class = action;
+            // updatedArray[j].class = action;
           } else if (action === "swap") {
-            updatedArray[i].class = "base";
-            updatedArray[j].class = "base";
+            colourChange(updatedArray, i, j, action);
             [updatedArray[i], updatedArray[j]] = [
               updatedArray[j],
               updatedArray[i],
@@ -96,6 +96,17 @@ export default function ContentScreen() {
     setTimeout(() => {
       isSorted();
     }, animations.length * delay);
+  };
+
+  const colourChange = (array, i, j, action) => {
+    setTimeout(() => {
+      array[i].class = action;
+      array[j].class = action;
+    }, delay);
+    setTimeout(() => {
+      array[i].class = "base";
+      array[j].class = "base";
+    }, delay * 2);
   };
 
   const isSorted = () => {
