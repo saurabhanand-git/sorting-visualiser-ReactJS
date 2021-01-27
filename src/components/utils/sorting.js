@@ -38,13 +38,16 @@ export const insertionSort = (unsortedArr) => {
     let j = i - 1;
     sortObj.animations.push([i, j, "comp", "key", "comp"]);
     while (j >= 0 && key < input[j]) {
+      sortObj.animations.push([j + 1, j, "comp", "key", "comp"]);
       sortObj.animations.push([j + 1, j, "swap", "key", "swap"]);
       input[j + 1] = input[j];
       sortObj.animations.push([j + 1, j, "insert", "done", "key"]);
+
       j -= 1;
     }
     input[j + 1] = key;
-    sortObj.animations.push([i, j, "done", "done", "done"]);
+    // add extra index to reset j
+    sortObj.animations.push([i, j + 1, "done", "done", "done", j, "done"]);
   }
   console.log(sortObj.animations);
   sortObj.sortedArray = input;

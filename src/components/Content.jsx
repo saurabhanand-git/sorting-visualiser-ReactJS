@@ -161,7 +161,7 @@ export default function ContentScreen() {
 
   // add timeout references to the satte so they may be cleared
   const processAnimations = (animations) => {
-    animations.forEach(([i, j, action, iClass, jClass], aIndex) => {
+    animations.forEach(([i, j, action, iClass, jClass, k, kClass], aIndex) => {
       const timeout = setTimeout(() => {
         setValues((currentValues) => {
           const updatedArray = [...currentValues];
@@ -172,7 +172,7 @@ export default function ContentScreen() {
               updatedArray[i],
             ];
           } else {
-            colourChange(updatedArray, i, j, iClass, jClass);
+            colourChange(updatedArray, i, j, iClass, jClass, k, kClass);
           }
           return updatedArray;
         });
@@ -191,13 +191,17 @@ export default function ContentScreen() {
     });
   };
 
-  const colourChange = (array, i, j, iClass, jClass) => {
+  const colourChange = (array, i, j, iClass, jClass, k, kClass) => {
     // conditionals added as in some sort algorithms array[j] will be undefined
     if (array[i]) {
       array[i].class = iClass;
     }
     if (array[j]) {
       array[j].class = jClass;
+    }
+    if (array[k]) {
+      console.log("got here");
+      array[k].class = kClass;
     }
   };
 
