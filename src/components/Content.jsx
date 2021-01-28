@@ -93,6 +93,7 @@ const theme = {
   key: "rgba(220, 186, 82, 0.8)",
   swap: "rgba(196, 64, 64, 0.8)",
   sorted: "rgba(92, 159, 77, 0.8)",
+  base: "rgba(103, 77, 159, 0.8)",
 };
 
 export default function ContentScreen() {
@@ -107,7 +108,7 @@ export default function ContentScreen() {
   const [algorithm, setAlgorithm] = useState("bubble");
   const maxA = 200;
   const minA = 5;
-  const maxN = 150;
+  const maxN = 1000;
   const minN = 3;
   const algoRef = {
     bubble: { f: bubbleSort, title: "Bubble Sort" },
@@ -161,12 +162,20 @@ export default function ContentScreen() {
 
   // add timeout references to the state so they may be cleared
   const processAnimations = (animations) => {
-    if (algorithm === "bubble" || algorithm === "insertion") {
+    if (
+      algorithm === "bubble" ||
+      algorithm === "insertion" ||
+      algorithm === "quick"
+    ) {
       animations.forEach(
         ([i, j, action, iClass, jClass, k, kClass], aIndex) => {
           const timeout = setTimeout(() => {
             setValues((currentValues) => {
-              if (algorithm === "bubble" || algorithm === "insertion") {
+              if (
+                algorithm === "bubble" ||
+                algorithm === "insertion" ||
+                algorithm === "quick"
+              ) {
                 const updatedArray = [...currentValues];
                 if (action === "swap") {
                   colourChange(updatedArray, i, j, iClass, jClass);
@@ -174,6 +183,11 @@ export default function ContentScreen() {
                     updatedArray[j],
                     updatedArray[i],
                   ];
+                  if (algorithm === "quick") {
+                    colourChange(updatedArray, i, j, "done", "done");
+                  }
+                } else if (action === "changePivot") {
+                  colourChange(updatedArray, i, null, "key");
                 } else {
                   colourChange(updatedArray, i, j, iClass, jClass, k, kClass);
                 }
@@ -187,22 +201,6 @@ export default function ContentScreen() {
           });
         }
       );
-    } else if (algorithm === "quick") {
-      animations.forEach(([i, j, action], aIndex) => {
-        const timeout = setTimeout(() => {
-          setValues((currentValues) => {
-            const updatedArray = [...currentValues];
-            [updatedArray[i], updatedArray[j]] = [
-              updatedArray[j],
-              updatedArray[i],
-            ];
-            return updatedArray;
-          });
-        }, delay * aIndex);
-        setTimeouts((currentTimeouts) => {
-          return [...currentTimeouts, timeout];
-        });
-      });
     }
     const sortedTimeout = setTimeout(() => {
       animateIsSorted();

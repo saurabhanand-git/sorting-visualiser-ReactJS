@@ -100,55 +100,35 @@ export const quickSortWrapper = (unsortedArr) => {
   const animations = [];
   const sortObj = {};
   quickSort(input, 0, unsortedArr.length - 1, animations);
-  //console.log(input);
   sortObj.sortedArray = input;
   sortObj.animations = animations;
-  // console.log(animations.slice(-10));
   return sortObj;
 };
 const quickSort = (arr, start, end, animations) => {
   if (start >= end) return;
   let pivot = partition(arr, start, end, animations);
+
   quickSort(arr, start, pivot - 1, animations);
   quickSort(arr, pivot + 1, end, animations);
 };
 
 const partition = (arr, start, end, animations) => {
+  animations.push([end, null, "changePivot"]);
   let pivot = arr[end];
   let i = start - 1;
   for (let j = start; j < end; j++) {
+    animations.push([j, null, "comp", "comp"]);
     if (arr[j] < pivot) {
+      animations.push([j, null, "comp", "done"]);
+      animations.push([i, null, "comp", "done"]);
       i++;
-      animations.push([i, j, "swap"]);
+      animations.push([i, j, "swap", "swap", "swap"]);
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+    animations.push([j, i, "comp", "done", "done"]);
+    // animations.push([i, null, "comp", "done"]);
   }
-  animations.push([i + 1, end, "swap"]);
+  animations.push([i + 1, end, "swap", "swap", "swap"]);
   [arr[i + 1], arr[end]] = [arr[end], arr[i + 1]];
   return i + 1;
 };
-
-// const quickSort = (arr, start, end) => {
-//   if (start >= end) return;
-//   let index = partition(arr, start, end);
-//   quickSort(arr, start, index - 1);
-//   quickSort(arr, index + 1, end);
-// };
-
-// const partition = (arr, start, end) => {
-//   let pivotIndex = start;
-//   let pivotValue = arr[end];
-//   for (let i = start; i < end; i++) {
-//     if (arr[i] < pivotValue) {
-//       swap(arr, i, pivotIndex);
-//       pivotIndex++;
-//     }
-//   }
-//   return pivotIndex;
-// };
-
-// const swap = (arr, a, b) => {
-//   let temp = arr[a];
-//   arr[a] = arr[b];
-//   arr[b] = temp;
-// };
