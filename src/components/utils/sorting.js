@@ -94,3 +94,55 @@ export const mergeSortWrap = (unsortedArr) => {
   sortObj.sortedArray = sorted;
   return sortObj;
 };
+
+export const quickSortWrapper = (unsortedArr) => {
+  const input = [...unsortedArr];
+  quickSort(input, 0, unsortedArr.length - 1);
+  console.log(input);
+  return { sortedArray: input };
+};
+const quickSort = (arr, start, end) => {
+  if (start >= end) return;
+  let pivot = partition(arr, start, end);
+  quickSort(arr, start, pivot - 1);
+  quickSort(arr, pivot + 1, end);
+};
+
+const partition = (arr, start, end) => {
+  let pivot = arr[end];
+  let i = start - 1;
+  for (let j = start; j < end; j++) {
+    if (arr[j] < pivot) {
+      i++;
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  [arr[i + 1], arr[end]] = [arr[end], arr[i + 1]];
+  return i + 1;
+};
+
+// const quickSort = (arr, start, end) => {
+//   if (start >= end) return;
+//   let index = partition(arr, start, end);
+//   quickSort(arr, start, index - 1);
+//   quickSort(arr, index + 1, end);
+// };
+
+// const partition = (arr, start, end) => {
+//   let pivotIndex = start;
+//   let pivotValue = arr[end];
+//   for (let i = start; i < end; i++) {
+//     if (arr[i] < pivotValue) {
+//       swap(arr, i, pivotIndex);
+//       pivotIndex++;
+//     }
+//   }
+//   return pivotIndex;
+// };
+
+// const swap = (arr, a, b) => {
+//   let temp = arr[a];
+//   arr[a] = arr[b];
+//   arr[b] = temp;
+// };

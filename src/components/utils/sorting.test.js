@@ -1,4 +1,9 @@
-import { bubbleSort, insertionSort, mergeSortWrap } from "./sorting";
+import {
+  bubbleSort,
+  insertionSort,
+  mergeSortWrap,
+  quickSortWrapper,
+} from "./sorting";
 import { generateNewArray } from "./arrays";
 
 describe("sorting functions", () => {
@@ -72,20 +77,8 @@ describe("sorting functions", () => {
       ];
       expect(insertionSort(unsortedArr).animations).toEqual(expAnim);
     });
-    it("should return a list of comparison and swap animations when required", () => {
-      const unsortedArr = [2, 3, 1, 4];
-      const expAnim = [
-        [1, 0, "comp", "key", "comp"],
-        [1, 0, "done", "done", "done"],
-        [2, 1, "comp", "key", "comp"],
-        [2, 1, "done", "done", "done"],
-        [3, 2, "comp", "key", "comp"],
-        [3, 2, "done", "done", "done"],
-      ];
-      expect(insertionSort(unsortedArr).animations).toEqual(expAnim);
-    });
   });
-  describe.only("mergeSort", () => {
+  describe("mergeSort", () => {
     it("should return a sorted array", () => {
       const unsortedArr = generateNewArray(200, 1, 200);
       const valuesToSort = unsortedArr.map((valueObj) => valueObj.value);
@@ -97,6 +90,21 @@ describe("sorting functions", () => {
       const valuesToSort = unsortedArr.map((valueObj) => valueObj.value);
       const unsortedArrCopy = [...valuesToSort];
       insertionSort(valuesToSort);
+      expect(valuesToSort).toEqual(unsortedArrCopy);
+    });
+  });
+  describe.only("quickSortWrapper", () => {
+    it("should return a sorted array", () => {
+      const unsortedArr = generateNewArray(200, 1, 200);
+      const valuesToSort = unsortedArr.map((valueObj) => valueObj.value);
+      const sorted = [...valuesToSort].sort((a, b) => a - b);
+      expect(quickSortWrapper(valuesToSort).sortedArray).toEqual(sorted);
+    });
+    it("should not mutate the input array", () => {
+      const unsortedArr = generateNewArray(200, 1, 200);
+      const valuesToSort = unsortedArr.map((valueObj) => valueObj.value);
+      const unsortedArrCopy = [...valuesToSort];
+      quickSortWrapper(valuesToSort);
       expect(valuesToSort).toEqual(unsortedArrCopy);
     });
   });
