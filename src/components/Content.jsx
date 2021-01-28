@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { generateNewArray } from "./utils/arrays";
-import { bubbleSort, insertionSort } from "./utils/sorting";
+import { bubbleSort, insertionSort, quickSortWrapper } from "./utils/sorting";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -112,6 +112,7 @@ export default function ContentScreen() {
   const algoRef = {
     bubble: { f: bubbleSort, title: "Bubble Sort" },
     insertion: { f: insertionSort, title: "Insertion Sort" },
+    quick: { f: quickSortWrapper, title: "Quick Sort" },
   };
 
   useEffect(() => {
@@ -160,29 +161,49 @@ export default function ContentScreen() {
 
   // add timeout references to the state so they may be cleared
   const processAnimations = (animations) => {
-    animations.forEach(([i, j, action, iClass, jClass, k, kClass], aIndex) => {
-      const timeout = setTimeout(() => {
-        setValues((currentValues) => {
-          if (algorithm === "bubble" || algorithm === "insertion") {
+    if (algorithm === "bubble" || algorithm === "insertion") {
+      animations.forEach(
+        ([i, j, action, iClass, jClass, k, kClass], aIndex) => {
+          const timeout = setTimeout(() => {
+            setValues((currentValues) => {
+              if (algorithm === "bubble" || algorithm === "insertion") {
+                const updatedArray = [...currentValues];
+                if (action === "swap") {
+                  colourChange(updatedArray, i, j, iClass, jClass);
+                  [updatedArray[i], updatedArray[j]] = [
+                    updatedArray[j],
+                    updatedArray[i],
+                  ];
+                } else {
+                  colourChange(updatedArray, i, j, iClass, jClass, k, kClass);
+                }
+                return updatedArray;
+              } else if (algorithm === "merge") {
+              }
+            });
+          }, delay * aIndex);
+          setTimeouts((currentTimeouts) => {
+            return [...currentTimeouts, timeout];
+          });
+        }
+      );
+    } else if (algorithm === "quick") {
+      animations.forEach(([i, j, action], aIndex) => {
+        const timeout = setTimeout(() => {
+          setValues((currentValues) => {
             const updatedArray = [...currentValues];
-            if (action === "swap") {
-              colourChange(updatedArray, i, j, iClass, jClass);
-              [updatedArray[i], updatedArray[j]] = [
-                updatedArray[j],
-                updatedArray[i],
-              ];
-            } else {
-              colourChange(updatedArray, i, j, iClass, jClass, k, kClass);
-            }
+            [updatedArray[i], updatedArray[j]] = [
+              updatedArray[j],
+              updatedArray[i],
+            ];
             return updatedArray;
-          } else if (algorithm === "merge") {
-          }
+          });
+        }, delay * aIndex);
+        setTimeouts((currentTimeouts) => {
+          return [...currentTimeouts, timeout];
         });
-      }, delay * aIndex);
-      setTimeouts((currentTimeouts) => {
-        return [...currentTimeouts, timeout];
       });
-    });
+    }
     const sortedTimeout = setTimeout(() => {
       animateIsSorted();
       setIsSorting(false);

@@ -97,27 +97,33 @@ export const mergeSortWrap = (unsortedArr) => {
 
 export const quickSortWrapper = (unsortedArr) => {
   const input = [...unsortedArr];
-  quickSort(input, 0, unsortedArr.length - 1);
-  console.log(input);
-  return { sortedArray: input };
+  const animations = [];
+  const sortObj = {};
+  quickSort(input, 0, unsortedArr.length - 1, animations);
+  //console.log(input);
+  sortObj.sortedArray = input;
+  sortObj.animations = animations;
+  // console.log(animations.slice(-10));
+  return sortObj;
 };
-const quickSort = (arr, start, end) => {
+const quickSort = (arr, start, end, animations) => {
   if (start >= end) return;
-  let pivot = partition(arr, start, end);
-  quickSort(arr, start, pivot - 1);
-  quickSort(arr, pivot + 1, end);
+  let pivot = partition(arr, start, end, animations);
+  quickSort(arr, start, pivot - 1, animations);
+  quickSort(arr, pivot + 1, end, animations);
 };
 
-const partition = (arr, start, end) => {
+const partition = (arr, start, end, animations) => {
   let pivot = arr[end];
   let i = start - 1;
   for (let j = start; j < end; j++) {
     if (arr[j] < pivot) {
       i++;
+      animations.push([i, j, "swap"]);
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
   }
-
+  animations.push([i + 1, end, "swap"]);
   [arr[i + 1], arr[end]] = [arr[end], arr[i + 1]];
   return i + 1;
 };
