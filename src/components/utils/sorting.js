@@ -49,7 +49,48 @@ export const insertionSort = (unsortedArr) => {
     // add extra index to reset j
     sortObj.animations.push([i, j + 1, "done", "done", "done", j, "done"]);
   }
-  console.log(sortObj.animations);
+
   sortObj.sortedArray = input;
+  return sortObj;
+};
+
+export const mergeSortWrap = (unsortedArr) => {
+  const sortObj = {
+    animations: [],
+  };
+  const mergeSort = (unsortedArr) => {
+    if (unsortedArr.length < 2) {
+      return unsortedArr;
+    }
+
+    const midIndex = Math.floor(unsortedArr.length / 2);
+
+    const left = unsortedArr.slice(0, midIndex);
+    const right = unsortedArr.slice(midIndex);
+
+    return merge(mergeSort(left), mergeSort(right));
+  };
+
+  const merge = (left, right) => {
+    const resultArr = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+
+    while (leftIndex < left.length && rightIndex < right.length) {
+      if (left[leftIndex] < right[rightIndex]) {
+        resultArr.push(left[leftIndex]);
+        leftIndex++;
+      } else {
+        resultArr.push(right[rightIndex]);
+        rightIndex++;
+      }
+    }
+
+    return resultArr
+      .concat(left.slice(leftIndex))
+      .concat(right.slice(rightIndex));
+  };
+  const sorted = mergeSort(unsortedArr);
+  sortObj.sortedArray = sorted;
   return sortObj;
 };

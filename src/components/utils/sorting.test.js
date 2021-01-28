@@ -1,4 +1,4 @@
-import { bubbleSort, insertionSort } from "./sorting";
+import { bubbleSort, insertionSort, mergeSortWrap } from "./sorting";
 import { generateNewArray } from "./arrays";
 
 describe("sorting functions", () => {
@@ -46,7 +46,7 @@ describe("sorting functions", () => {
       expect(bubbleSort(unsortedArr).animations).toEqual(expAnim);
     });
   });
-  describe("insertionSort", () => {
+  describe.skip("insertionSort", () => {
     it("should return a sorted array", () => {
       const unsortedArr = generateNewArray(200, 1, 200);
       const valuesToSort = unsortedArr.map((valueObj) => valueObj.value);
@@ -60,7 +60,7 @@ describe("sorting functions", () => {
       insertionSort(valuesToSort);
       expect(valuesToSort).toEqual(unsortedArrCopy);
     });
-    it.only("should return a list of comparison animations for an already sorted array", () => {
+    it("should return a list of comparison animations for an already sorted array", () => {
       const unsortedArr = [1, 2, 3, 4];
       const expAnim = [
         [1, 0, "comp", "key", "comp"],
@@ -83,6 +83,21 @@ describe("sorting functions", () => {
         [3, 2, "done", "done", "done"],
       ];
       expect(insertionSort(unsortedArr).animations).toEqual(expAnim);
+    });
+  });
+  describe.only("mergeSort", () => {
+    it("should return a sorted array", () => {
+      const unsortedArr = generateNewArray(200, 1, 200);
+      const valuesToSort = unsortedArr.map((valueObj) => valueObj.value);
+      const sorted = [...valuesToSort].sort((a, b) => a - b);
+      expect(mergeSortWrap(valuesToSort).sortedArray).toEqual(sorted);
+    });
+    it("should not mutate the input array", () => {
+      const unsortedArr = generateNewArray(200, 1, 200);
+      const valuesToSort = unsortedArr.map((valueObj) => valueObj.value);
+      const unsortedArrCopy = [...valuesToSort];
+      insertionSort(valuesToSort);
+      expect(valuesToSort).toEqual(unsortedArrCopy);
     });
   });
 });
