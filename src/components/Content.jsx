@@ -4,7 +4,6 @@ import { generateNewArray } from "./utils/arrays";
 import { bubbleSort, insertionSort } from "./utils/sorting";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import logo from "../assets/logo.png";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
@@ -159,22 +158,25 @@ export default function ContentScreen() {
     processAnimations(animations);
   };
 
-  // add timeout references to the satte so they may be cleared
+  // add timeout references to the state so they may be cleared
   const processAnimations = (animations) => {
     animations.forEach(([i, j, action, iClass, jClass, k, kClass], aIndex) => {
       const timeout = setTimeout(() => {
         setValues((currentValues) => {
-          const updatedArray = [...currentValues];
-          if (action === "swap") {
-            colourChange(updatedArray, i, j, iClass, jClass);
-            [updatedArray[i], updatedArray[j]] = [
-              updatedArray[j],
-              updatedArray[i],
-            ];
-          } else {
-            colourChange(updatedArray, i, j, iClass, jClass, k, kClass);
+          if (algorithm === "bubble" || algorithm === "insertion") {
+            const updatedArray = [...currentValues];
+            if (action === "swap") {
+              colourChange(updatedArray, i, j, iClass, jClass);
+              [updatedArray[i], updatedArray[j]] = [
+                updatedArray[j],
+                updatedArray[i],
+              ];
+            } else {
+              colourChange(updatedArray, i, j, iClass, jClass, k, kClass);
+            }
+            return updatedArray;
+          } else if (algorithm === "merge") {
           }
-          return updatedArray;
         });
       }, delay * aIndex);
       setTimeouts((currentTimeouts) => {
@@ -200,7 +202,6 @@ export default function ContentScreen() {
       array[j].class = jClass;
     }
     if (array[k]) {
-      console.log("got here");
       array[k].class = kClass;
     }
   };
