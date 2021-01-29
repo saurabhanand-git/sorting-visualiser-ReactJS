@@ -21,7 +21,6 @@ export const bubbleSort = (unsortedArr) => {
     }
     j++;
   }
-
   sortObj.sortedArray = input;
   return sortObj;
 };
@@ -54,6 +53,45 @@ export const insertionSort = (unsortedArr) => {
   return sortObj;
 };
 
+// Quicksort functions
+export const quickSortWrapper = (unsortedArr) => {
+  const input = [...unsortedArr];
+  const animations = [];
+  const sortObj = {};
+  quickSort(input, 0, unsortedArr.length - 1, animations);
+  sortObj.sortedArray = input;
+  sortObj.animations = animations;
+  return sortObj;
+};
+const quickSort = (arr, start, end, animations) => {
+  if (start >= end) return;
+  let pivot = partition(arr, start, end, animations);
+  quickSort(arr, start, pivot - 1, animations);
+  quickSort(arr, pivot + 1, end, animations);
+};
+
+const partition = (arr, start, end, animations) => {
+  animations.push([end, null, "changePivot"]);
+  let pivot = arr[end];
+  let i = start - 1;
+  for (let j = start; j < end; j++) {
+    animations.push([j, null, "comp", "comp"]);
+    if (arr[j] < pivot) {
+      i++;
+      animations.push([j, i, "comp", "swap", "swap"]);
+      animations.push([i, j, "swap", "swap", "swap"]);
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+      animations.push([i, j, "comp", "done", "done"]);
+    } else {
+      animations.push([j, i, "comp", "done", "done"]);
+    }
+  }
+  animations.push([i + 1, end, "swap", "swap", "swap"]);
+  [arr[i + 1], arr[end]] = [arr[end], arr[i + 1]];
+  return i + 1;
+};
+
+// Merge Sort Functions
 export const mergeSortWrap = (unsortedArr) => {
   const sortObj = {
     animations: [],
@@ -62,9 +100,7 @@ export const mergeSortWrap = (unsortedArr) => {
     if (unsortedArr.length < 2) {
       return unsortedArr;
     }
-
     const midIndex = Math.floor(unsortedArr.length / 2);
-
     const left = unsortedArr.slice(0, midIndex);
     const right = unsortedArr.slice(midIndex);
 
@@ -85,7 +121,6 @@ export const mergeSortWrap = (unsortedArr) => {
         rightIndex++;
       }
     }
-
     return resultArr
       .concat(left.slice(leftIndex))
       .concat(right.slice(rightIndex));
@@ -93,43 +128,4 @@ export const mergeSortWrap = (unsortedArr) => {
   const sorted = mergeSort(unsortedArr);
   sortObj.sortedArray = sorted;
   return sortObj;
-};
-
-export const quickSortWrapper = (unsortedArr) => {
-  const input = [...unsortedArr];
-  const animations = [];
-  const sortObj = {};
-  quickSort(input, 0, unsortedArr.length - 1, animations);
-  sortObj.sortedArray = input;
-  sortObj.animations = animations;
-  return sortObj;
-};
-const quickSort = (arr, start, end, animations) => {
-  if (start >= end) return;
-  let pivot = partition(arr, start, end, animations);
-
-  quickSort(arr, start, pivot - 1, animations);
-  quickSort(arr, pivot + 1, end, animations);
-};
-
-const partition = (arr, start, end, animations) => {
-  animations.push([end, null, "changePivot"]);
-  let pivot = arr[end];
-  let i = start - 1;
-  for (let j = start; j < end; j++) {
-    animations.push([j, null, "comp", "comp"]);
-    if (arr[j] < pivot) {
-      i++;
-      animations.push([j, i, "comp", "swap", "swap"]);
-      animations.push([i, j, "swap", "swap", "swap"]);
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-      animations.push([i, j, "comp", "done", "done"]);
-    } else {
-      animations.push([j, i, "comp", "done", "done"]);
-    }
-    // animations.push([i, null, "comp", "done"]);
-  }
-  animations.push([i + 1, end, "swap", "swap", "swap"]);
-  [arr[i + 1], arr[end]] = [arr[end], arr[i + 1]];
-  return i + 1;
 };
