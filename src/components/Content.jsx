@@ -38,12 +38,32 @@ const HeaderContainer = styled.div`
       padding: 0 0 0.3rem 0;
     }
   }
+  @media only screen and (min-width: 900px) and (max-width: 1300px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.2rem 0 0 0;
+  }
+  @media only screen and (max-width: 900px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.2rem 0 0 0;
+    header {
+      h1 {
+        font-size: 2rem;
+      }
+      img {
+        width: 2rem;
+      }
+    }
+  }
 `;
 
 const CustomForm = styled(Form)`
   display: flex;
   align-items: center;
-  height: 5rem;
+  height: auto;
   color: #fff;
   .form-group {
     margin: 0 1rem 0 1rem;
@@ -52,20 +72,52 @@ const CustomForm = styled(Form)`
   .form-label {
     margin: 0 0 0 0;
   }
-  .form-text {
-  }
-  .custom-range {
-  }
   .algo {
     margin: 0 2rem 0 2rem;
     .dropdown-toggle {
       width: 9rem;
     }
   }
+  .selectorGroup {
+    display: flex;
+    align-items: center;
+  }
   button {
     height: 3rem;
     margin: 0 0.2rem 0 0.2rem;
     width: 7rem;
+  }
+  @media only screen and (max-width: 900px) {
+    flex-direction: column;
+    .selectorGroup {
+      width: 100vw;
+      justify-content: space-around;
+      padding-right: 0.5rem;
+    }
+    .buttonGroup {
+      width: 100vw;
+      display: flex;
+      justify-content: space-around;
+      padding: 0 0.5rem 1rem 0.5rem;
+      .btn {
+        width: 9rem;
+      }
+    }
+    .form-group {
+      margin: 0 0.3rem 0 0.3rem;
+      width: auto;
+    }
+    .form-label {
+      font-size: 0.75rem;
+    }
+    .algo {
+      margin: 0 0.3rem 0 0.3rem;
+      .dropdown-toggle {
+        width: 9rem;
+        font-size: 1rem;
+        margin-right: 1rem;
+      }
+    }
   }
 `;
 
@@ -75,7 +127,7 @@ const Bars = styled.div`
   align-items: flex-end;
   width: 80vw;
   height: 80vh;
-  margin: 2rem 0 0 1rem;
+  margin: 2rem 0 2rem 1rem;
 `;
 
 const Bar = styled.div`
@@ -238,61 +290,69 @@ export default function ContentScreen() {
           <h1>Sort Visualiser</h1>
         </header>
         <CustomForm>
-          <Form.Group className="algo">
-            <DropdownButton title={algoRef[algorithm].title}>
-              {Object.keys(algoRef).map((algoKey) => {
-                return (
-                  <DropdownItem
-                    key={algoKey}
-                    name={algoKey}
-                    onClick={handleAlgoSelect}
-                  >
-                    {algoRef[algoKey].title}
-                  </DropdownItem>
-                );
-              })}
-            </DropdownButton>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Array Size: </Form.Label>
-            <Form.Text>{nBars}</Form.Text>
-            <Form.Control
-              type="range"
-              custom
-              value={nBars}
-              max={maxN}
-              min={minN}
-              onChange={handleBarNChange}
+          <div className="selectorGroup">
+            <Form.Group className="algo">
+              <DropdownButton title={algoRef[algorithm].title}>
+                {Object.keys(algoRef).map((algoKey) => {
+                  return (
+                    <DropdownItem
+                      key={algoKey}
+                      name={algoKey}
+                      onClick={handleAlgoSelect}
+                    >
+                      {algoRef[algoKey].title}
+                    </DropdownItem>
+                  );
+                })}
+              </DropdownButton>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Array Size: </Form.Label>
+              <Form.Text>{nBars}</Form.Text>
+              <Form.Control
+                type="range"
+                custom
+                value={nBars}
+                max={maxN}
+                min={minN}
+                onChange={handleBarNChange}
+                disabled={isSorting}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Animation Delay: </Form.Label>
+              <Form.Text>{delay} ms</Form.Text>
+              <Form.Control
+                type="range"
+                custom
+                value={delay}
+                max={1000}
+                min={0}
+                step={100}
+                onChange={handleDelayChange}
+                disabled={isSorting}
+              />
+            </Form.Group>
+          </div>
+          <div className="buttonGroup">
+            <Button
+              variant="info"
+              onClick={handleRandomise}
               disabled={isSorting}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Animation Delay: </Form.Label>
-            <Form.Text>{delay} ms</Form.Text>
-            <Form.Control
-              type="range"
-              custom
-              value={delay}
-              max={1000}
-              min={0}
-              step={100}
-              onChange={handleDelayChange}
-              disabled={isSorting}
-            />
-          </Form.Group>
-          <Button variant="info" onClick={handleRandomise} disabled={isSorting}>
-            Randomise
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleSort}
-            disabled={isSorted || isSorting}
-          >
-            Sort
-          </Button>
-          <Button variant="danger" onClick={handleStop} disabled={!isSorting}>
-            Stop
-          </Button>
+            >
+              Randomise
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleSort}
+              disabled={isSorted || isSorting}
+            >
+              Sort
+            </Button>
+            <Button variant="danger" onClick={handleStop} disabled={!isSorting}>
+              Stop
+            </Button>
+          </div>
         </CustomForm>
       </HeaderContainer>
       {isLoading ? (
