@@ -14,6 +14,13 @@ const ContentContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  .headerWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    background-color: rgb(28, 48, 65);
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -22,6 +29,7 @@ const HeaderContainer = styled.div`
   justify-content: space-between;
   padding: 0.2rem 3rem 0rem 3rem;
   width: 100%;
+  max-width: 1900px;
   background-color: rgb(28, 48, 65);
   header {
     display: flex;
@@ -104,7 +112,7 @@ const CustomForm = styled(Form)`
       }
     }
     .form-group {
-      margin: 0 0.3rem 0 0.3rem;
+      margin: 0 0.2rem 0 0.2rem;
       width: auto;
     }
     .form-label {
@@ -113,9 +121,8 @@ const CustomForm = styled(Form)`
     .algo {
       margin: 0 0.3rem 0 0.3rem;
       .dropdown-toggle {
-        width: 9rem;
+        width: 8rem;
         font-size: 1rem;
-        margin-right: 1rem;
       }
     }
   }
@@ -125,7 +132,7 @@ const Bars = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  width: 80vw;
+  width: 90vw;
   height: 80vh;
   margin: 2rem 0 2rem 1rem;
 `;
@@ -284,77 +291,83 @@ export default function ContentScreen() {
 
   return (
     <ContentContainer>
-      <HeaderContainer>
-        <header>
-          <img src={logo} alt="sorted bars logo" />
-          <h1>Sort Visualiser</h1>
-        </header>
-        <CustomForm>
-          <div className="selectorGroup">
-            <Form.Group className="algo">
-              <DropdownButton title={algoRef[algorithm].title}>
-                {Object.keys(algoRef).map((algoKey) => {
-                  return (
-                    <DropdownItem
-                      key={algoKey}
-                      name={algoKey}
-                      onClick={handleAlgoSelect}
-                    >
-                      {algoRef[algoKey].title}
-                    </DropdownItem>
-                  );
-                })}
-              </DropdownButton>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Array Size: </Form.Label>
-              <Form.Text>{nBars}</Form.Text>
-              <Form.Control
-                type="range"
-                custom
-                value={nBars}
-                max={maxN}
-                min={minN}
-                onChange={handleBarNChange}
+      <div className="headerWrapper">
+        <HeaderContainer>
+          <header>
+            <img src={logo} alt="sorted bars logo" />
+            <h1>Sort Visualiser</h1>
+          </header>
+          <CustomForm>
+            <div className="selectorGroup">
+              <Form.Group className="algo">
+                <DropdownButton title={algoRef[algorithm].title}>
+                  {Object.keys(algoRef).map((algoKey) => {
+                    return (
+                      <DropdownItem
+                        key={algoKey}
+                        name={algoKey}
+                        onClick={handleAlgoSelect}
+                      >
+                        {algoRef[algoKey].title}
+                      </DropdownItem>
+                    );
+                  })}
+                </DropdownButton>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Array Size: </Form.Label>
+                <Form.Text>{nBars}</Form.Text>
+                <Form.Control
+                  type="range"
+                  custom
+                  value={nBars}
+                  max={maxN}
+                  min={minN}
+                  onChange={handleBarNChange}
+                  disabled={isSorting}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Animation Delay: </Form.Label>
+                <Form.Text>{delay} ms</Form.Text>
+                <Form.Control
+                  type="range"
+                  custom
+                  value={delay}
+                  max={1000}
+                  min={0}
+                  step={100}
+                  onChange={handleDelayChange}
+                  disabled={isSorting}
+                />
+              </Form.Group>
+            </div>
+            <div className="buttonGroup">
+              <Button
+                variant="info"
+                onClick={handleRandomise}
                 disabled={isSorting}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Animation Delay: </Form.Label>
-              <Form.Text>{delay} ms</Form.Text>
-              <Form.Control
-                type="range"
-                custom
-                value={delay}
-                max={1000}
-                min={0}
-                step={100}
-                onChange={handleDelayChange}
-                disabled={isSorting}
-              />
-            </Form.Group>
-          </div>
-          <div className="buttonGroup">
-            <Button
-              variant="info"
-              onClick={handleRandomise}
-              disabled={isSorting}
-            >
-              Randomise
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleSort}
-              disabled={isSorted || isSorting}
-            >
-              Sort
-            </Button>
-            <Button variant="danger" onClick={handleStop} disabled={!isSorting}>
-              Stop
-            </Button>
-          </div>
-        </CustomForm>
-      </HeaderContainer>
+              >
+                Randomise
+              </Button>
+              <Button
+                variant="success"
+                onClick={handleSort}
+                disabled={isSorted || isSorting}
+              >
+                Sort
+              </Button>
+              <Button
+                variant="danger"
+                onClick={handleStop}
+                disabled={!isSorting}
+              >
+                Stop
+              </Button>
+            </div>
+          </CustomForm>
+        </HeaderContainer>
+      </div>
       {isLoading ? (
         <span>Loading</span>
       ) : (
