@@ -19,7 +19,7 @@ This is a sorting algorithm visualiser I created as a learning exercise.</br>
 ## About
 
 I made this visualiser as I was interested in learning more about different sorting algorithms. Beyond writing the algorithms themselves, this required finding a way to display ongoing changes to the user.
-My approach was to throughout execution of the sort functions, add 'animation' steps containing target indices and instructions to a a queue which is then played back to the user using `setTimeout` to add a delay. The references from `setTimeout` are stored so they may be cleared if the user chooses to stop the playback.
+My approach was to throughout execution of the sort functions, add 'animation' steps containing target indices and instructions to a queue, which is then played back to the user using `setTimeout` to add a delay. The references from `setTimeout` are stored so they may be cleared if the user chooses to stop the playback.
 </br></br>
 The complexity of queueing these animation steps did vary with the complexity of the sort method. E.g. recursive algorithms like quicksort required more adjustment than bubble sort. For this reason, the relative speed of these algorithms in the app should not be used as a true comparison of their speed. The chosen method of adding animations to the top level queue also meant that some functions had to be re-written in a more 'verbose' way.
 
