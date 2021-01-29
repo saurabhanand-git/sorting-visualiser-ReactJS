@@ -133,7 +133,7 @@ const Bars = styled.div`
   justify-content: center;
   align-items: flex-end;
   width: 90vw;
-  height: 80vh;
+  height: 83vh;
   margin: 2rem 0 2rem 1rem;
 `;
 
