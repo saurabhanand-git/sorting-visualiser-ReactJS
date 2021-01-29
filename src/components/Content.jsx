@@ -157,7 +157,7 @@ const theme = {
 
 export default function ContentScreen() {
   const [values, setValues] = useState([]);
-  const [nBars, setNBars] = useState(15);
+  const [nBars, setNBars] = useState(50);
   const [delay, setDelay] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isSorting, setIsSorting] = useState(false);
