@@ -119,13 +119,14 @@ const partition = (arr, start, end, animations) => {
   for (let j = start; j < end; j++) {
     animations.push([j, null, "comp", "comp"]);
     if (arr[j] < pivot) {
-      animations.push([j, null, "comp", "done"]);
-      animations.push([i, null, "comp", "done"]);
       i++;
+      animations.push([j, i, "comp", "swap", "swap"]);
       animations.push([i, j, "swap", "swap", "swap"]);
       [arr[i], arr[j]] = [arr[j], arr[i]];
+      animations.push([i, j, "comp", "done", "done"]);
+    } else {
+      animations.push([j, i, "comp", "done", "done"]);
     }
-    animations.push([j, i, "comp", "done", "done"]);
     // animations.push([i, null, "comp", "done"]);
   }
   animations.push([i + 1, end, "swap", "swap", "swap"]);
