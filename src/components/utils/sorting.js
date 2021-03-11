@@ -169,7 +169,7 @@ const heapify = (arr, n, i) => {
   if (right < n && arr[right] > arr[largest]) largest = right;
 
   // if root is not largest, swap with child and continue to heapify
-  if (largest != i) {
+  if (largest !== i) {
     [arr[i], arr[largest]] = [arr[largest], arr[i]];
     heapify(arr, n, largest);
   }

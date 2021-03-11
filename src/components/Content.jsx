@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { generateNewArray } from "./utils/arrays";
-import { bubbleSort, insertionSort, quickSortWrapper } from "./utils/sorting";
+import {
+  bubbleSort,
+  insertionSort,
+  quickSortWrapper,
+  heapSortWrapper,
+} from "./utils/sorting";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -173,6 +178,7 @@ export default function ContentScreen() {
     bubble: { f: bubbleSort, title: "Bubble Sort" },
     insertion: { f: insertionSort, title: "Insertion Sort" },
     quick: { f: quickSortWrapper, title: "Quicksort" },
+    heap: { f: heapSortWrapper, title: "Heap Sort" },
   };
 
   useEffect(() => {
@@ -183,7 +189,6 @@ export default function ContentScreen() {
 
   const handleAlgoSelect = (event) => {
     const selected = event.target.name;
-    console.log("selected>", selected);
     setAlgorithm(selected);
   };
 
