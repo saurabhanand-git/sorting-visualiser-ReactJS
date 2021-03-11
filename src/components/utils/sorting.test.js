@@ -110,22 +110,24 @@ describe("sorting functions", () => {
       expect(valuesToSort).toEqual(unsortedArrCopy);
     });
   });
-});
-describe.only("heapSort", () => {
-  it.skip("should return a sorted array", () => {
-    const unsortedArr = generateNewArray(200, 1, 200);
-    const valuesToSort = unsortedArr.map((valueObj) => valueObj.value);
-    const sorted = [...valuesToSort].sort((a, b) => a - b);
-    expect(heapSortWrapper(valuesToSort).sortedArray).toEqual(sorted);
-  });
-  describe("buildMaxHeap", () => {
-    it("should return a max heap for a given array", () => {
-      const input = [4, 10, 3, 5, 1];
-      const expectedOutput = [10, 5, 3, 4, 1];
-      expect(buildMaxHeap(input)).toEqual(expectedOutput);
-      const input2 = [1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17];
-      const expectedOutput2 = [17, 15, 13, 9, 6, 5, 10, 4, 8, 3, 1];
-      expect(buildMaxHeap(input2)).toEqual(expectedOutput2);
+  describe.only("heapSort", () => {
+    describe("buildMaxHeap", () => {
+      it("should return a max heap for a given array", () => {
+        const input = [4, 10, 3, 5, 1];
+        const expectedOutput = [10, 5, 3, 4, 1];
+        expect(buildMaxHeap(input)).toEqual(expectedOutput);
+        const input2 = [1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17];
+        const expectedOutput2 = [17, 15, 13, 9, 6, 5, 10, 4, 8, 3, 1];
+        expect(buildMaxHeap(input2)).toEqual(expectedOutput2);
+      });
+    });
+    describe("heapSortWrapper", () => {
+      it("should return a sorted array", () => {
+        const unsortedArr = generateNewArray(200, 1, 200);
+        const valuesToSort = unsortedArr.map((valueObj) => valueObj.value);
+        const sorted = [...valuesToSort].sort((a, b) => a - b);
+        expect(heapSortWrapper(valuesToSort).sortedArray).toEqual(sorted);
+      });
     });
   });
 });

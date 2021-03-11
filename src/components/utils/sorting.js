@@ -135,10 +135,23 @@ export const heapSortWrapper = (unsortedArr) => {
   const sortObj = {
     animations: [],
   };
+  const arr = [...unsortedArr];
+  const n = arr.length;
+
+  buildMaxHeap(arr);
+
+  // sort
+  for (let i = n - 1; i >= 0; i--) {
+    [arr[i], arr[0]] = [arr[0], arr[i]];
+    // heapify the root element
+    heapify(arr, i, 0);
+  }
+
+  sortObj.sortedArray = arr;
+  return sortObj;
 };
 
-export const buildMaxHeap = (inputArr) => {
-  const arr = [...inputArr];
+export const buildMaxHeap = (arr) => {
   const n = arr.length;
   for (let i = Math.floor(n / 2 - 1); i >= 0; i--) {
     heapify(arr, n, i);
@@ -147,7 +160,7 @@ export const buildMaxHeap = (inputArr) => {
 };
 
 const heapify = (arr, n, i) => {
-  // find the largest element from the root and its children
+  // find the largest element from the root and its direct children
   let largest = i;
   let left = 2 * i + 1;
   let right = 2 * i + 2;
@@ -155,7 +168,7 @@ const heapify = (arr, n, i) => {
   if (left < n && arr[left] > arr[largest]) largest = left;
   if (right < n && arr[right] > arr[largest]) largest = right;
 
-  // if root is not largest, swap and continue to heapify
+  // if root is not largest, swap with child and continue to heapify
   if (largest != i) {
     [arr[i], arr[largest]] = [arr[largest], arr[i]];
     heapify(arr, n, largest);
