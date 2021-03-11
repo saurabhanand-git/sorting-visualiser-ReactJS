@@ -129,3 +129,35 @@ export const mergeSortWrap = (unsortedArr) => {
   sortObj.sortedArray = sorted;
   return sortObj;
 };
+
+// Heap Sort Functions
+export const heapSortWrapper = (unsortedArr) => {
+  const sortObj = {
+    animations: [],
+  };
+};
+
+export const buildMaxHeap = (inputArr) => {
+  const arr = [...inputArr];
+  const n = arr.length;
+  for (let i = Math.floor(n / 2 - 1); i >= 0; i--) {
+    heapify(arr, n, i);
+  }
+  return arr;
+};
+
+const heapify = (arr, n, i) => {
+  // find the largest element from the root and its children
+  let largest = i;
+  let left = 2 * i + 1;
+  let right = 2 * i + 2;
+
+  if (left < n && arr[left] > arr[largest]) largest = left;
+  if (right < n && arr[right] > arr[largest]) largest = right;
+
+  // if root is not largest, swap and continue to heapify
+  if (largest != i) {
+    [arr[i], arr[largest]] = [arr[largest], arr[i]];
+    heapify(arr, n, largest);
+  }
+};
