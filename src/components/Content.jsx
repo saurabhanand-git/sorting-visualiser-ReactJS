@@ -300,7 +300,7 @@ export default function ContentScreen() {
         <HeaderContainer>
           <header>
             <img src={logo} alt="sorted bars logo" />
-            <h1>Sort Visualiser</h1>
+            <h1>Sorting Visualiser</h1>
           </header>
           <CustomForm>
             <div className="selectorGroup">
